@@ -1,0 +1,150 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&family=Nunito:wght@400;700;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+.shell{display:flex;align-items:center;justify-content:center;padding:2rem 0;background:transparent;}
+.phone{width:360px;height:640px;background:var(--color-background-primary);border-radius:40px;border:2.5px solid var(--color-border-secondary);overflow:hidden;display:flex;flex-direction:column;position:relative;}
+.topbar{padding:18px 20px 14px;background:#7F77DD;display:flex;align-items:center;gap:12px;}
+.avatar{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.topbar-info{flex:1;}
+.status-dot { width: 7px; height: 7px; border-radius: 50%; background: #55efc4; display: inline-block; }
+.topbar-name{font-family:'Nunito',sans-serif;font-weight:800;color:#fff;font-size:16px;letter-spacing:.3px;}
+.topbar-status{font-family:'Nunito',sans-serif;font-size:12px;color:rgba(255,255,255,0.75);}
+.topbar-dots{display:flex;gap:4px;align-items:center;}
+.dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.6);}
+.date-sep{text-align:center;margin:12px 0;font-size:11px;color:var(--color-text-tertiary);font-family:'Nunito',sans-serif;letter-spacing:.5px;}
+.msgs{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:4px;background:var(--color-background-tertiary);}
+.msgs::-webkit-scrollbar{width:3px;}
+.msgs::-webkit-scrollbar-thumb{background:var(--color-border-secondary);border-radius:4px;}
+.bubble-row{display:flex;align-items:flex-end;gap:8px;animation:popIn .25s ease;}
+.bubble-row.me{flex-direction:row-reverse;}
+.bav{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;background:#EEEDFE;}
+.bubble{padding:10px 14px;border-radius:18px;max-width:72%;font-family:'Noto Sans Bengali',sans-serif;font-size:14px;line-height:1.5;position:relative;word-break:break-word;}
+.bubble.me{background:#7F77DD;color:#EEEDFE;border-bottom-right-radius:4px;}
+.bubble.bot{background:var(--color-background-primary);color:var(--color-text-primary);border-bottom-left-radius:4px;border:0.5px solid var(--color-border-tertiary);}
+.bubble .ts{font-size:10px;opacity:.6;margin-top:4px;display:block;font-family:'Nunito',sans-serif;}
+.bubble.me .ts{text-align:right;color:#CECBF6;}
+.bubble.bot .ts{color:var(--color-text-tertiary);}
+.typing{display:flex;align-items:center;gap:5px;padding:10px 14px;background:var(--color-background-primary);border-radius:18px;border-bottom-left-radius:4px;border:0.5px solid var(--color-border-tertiary);width:fit-content;}
+.typing span{width:7px;height:7px;border-radius:50%;background:#7F77DD;animation:bounce .9s infinite;}
+.typing span:nth-child(2){animation-delay:.18s;}
+.typing span:nth-child(3){animation-delay:.36s;}
+.bottom{padding:10px 12px;background:var(--color-background-primary);border-top:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:8px;}
+.emoji-btn{width:36px;height:36px;border-radius:50%;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .15s;}
+.emoji-btn:hover{transform:scale(1.1);}
+.msg-input{flex:1;height:40px;border:1.5px solid var(--color-border-secondary);border-radius:20px;padding:0 14px;font-family:'Noto Sans Bengali',sans-serif;font-size:14px;background:var(--color-background-secondary);color:var(--color-text-primary);outline:none;transition:border-color .2s;}
+.msg-input:focus{border-color:#7F77DD;}
+.send-btn{width:40px;height:40px;border-radius:50%;border:none;background:#7F77DD;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .15s, background .2s;}
+.send-btn:hover{background:#533AB7;transform:scale(1.05);}
+.send-btn svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.emoji-picker{position:absolute;bottom:70px;left:12px;background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:16px;padding:10px;display:none;grid-template-columns:repeat(6,1fr);gap:6px;z-index:10;width:220px;}
+.emoji-picker.open{display:grid;}
+.ep-emoji{font-size:22px;cursor:pointer;text-align:center;padding:4px;border-radius:8px;transition:background .1s;}
+.ep-emoji:hover{background:var(--color-background-secondary);}
+@keyframes popIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+@keyframes bounce{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-6px);}}
+</style>
+
+<h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">কিডস মেসেঞ্জার — একটি বন্ধুত্বপূর্ণ চ্যাট অ্যাপ</h2>
+
+<div class="shell">
+ <div class="phone">
+  <div class="topbar">
+   <div class="avatar"></div>
+   <div class="topbar-info">
+    <div class="topbar-name">মেসেনজার বট</div>
+    <div class="topbar-status" id="status-txt"><span class="status-dot"></span> অনলাইন</div>
+   </div>
+   <div class="topbar-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+  </div>
+
+  <div class="msgs" id="msgs">
+   <div class="date-sep">আজকে</div>
+   <div class="bubble-row">
+    <div class="bav"></div>
+    <div class="bubble bot">হেলো বন্ধু! আমি তোমার সাথে কথা বলতে পেরে খুব খুশি 😊<span class="ts">এইমাত্র</span></div>
+   </div>
+  </div>
+
+  <div class="emoji-picker" id="epicker">
+   <span class="ep-emoji">😀</span><span class="ep-emoji">😂</span><span class="ep-emoji">🥰</span>
+   <span class="ep-emoji">😎</span><span class="ep-emoji">🤩</span><span class="ep-emoji">😜</span>
+   <span class="ep-emoji">👍</span><span class="ep-emoji">🎉</span><span class="ep-emoji">🚀</span>
+   <span class="ep-emoji">❤️</span><span class="ep-emoji">🌟</span><span class="ep-emoji">🎈</span>
+  </div>
+
+  <div class="bottom">
+   <button class="emoji-btn" id="emoji-toggle" aria-label="ইমোজি বেছে নাও">😊</button>
+   <input class="msg-input" id="msg" placeholder="মেসেজ লিখুন...">
+   <button class="send-btn" id="send-btn" aria-label="পাঠাও">
+    <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+   </button>
+  </div>
+ </div>
+</div>
+
+<script>
+const msgs=document.getElementById('msgs');
+const input=document.getElementById('msg');
+const sendBtn=document.getElementById('send-btn');
+const emojiToggle=document.getElementById('emoji-toggle');
+const epicker=document.getElementById('epicker');
+const statusTxt=document.getElementById('status-txt');
+
+const replies=[
+ ["দারুণ বললে! 🎉","সত্যিই? আমিও তাই মনে করি 😄","হাহা খুব মজার 😂","ওয়াও! আশ্চর্য 🤩","তুমি সত্যিই স্মার্ট! 🌟","আমি তোমার সাথে কথা বলতে ভালোবাসি ❤️","একদম ঠিক বলেছ 👍","খুব সুন্দর কথা 🥰","চমৎকার! 🚀","তুমি অনেক মজার মানুষ 😎"]
+];
+
+function time(){const d=new Date();return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');}
+
+function addMsg(text,isMe){
+ const row=document.createElement('div');
+ row.className='bubble-row'+(isMe?' me':'');
+ if(!isMe){const av=document.createElement('div');av.className='bav';av.textContent='';row.appendChild(av);}
+ const bub=document.createElement('div');
+ bub.className='bubble '+(isMe?'me':'bot');
+ bub.innerHTML=text+'<span class="ts">'+time()+(isMe?' ✓✓':'')+'</span>';
+ row.appendChild(bub);
+ msgs.appendChild(row);
+ msgs.scrollTop=msgs.scrollHeight;
+}
+
+function showTyping(){
+ const row=document.createElement('div');
+ row.className='bubble-row';
+ row.id='typing-row';
+ const av=document.createElement('div');av.className='bav';av.textContent='🤖';
+ const t=document.createElement('div');t.className='typing';
+ t.innerHTML='<span></span><span></span><span></span>';
+ row.appendChild(av);row.appendChild(t);
+ msgs.appendChild(row);
+ msgs.scrollTop=msgs.scrollHeight;
+ return row;
+}
+
+function send(){
+ const txt=input.value.trim();
+ if(!txt)return;
+ addMsg(txt,true);
+ input.value='';
+ epicker.classList.remove('open');
+ statusTxt.textContent='টাইপ করছে...';
+ const tr=showTyping();
+ const delay=800+Math.random()*700;
+ setTimeout(()=>{
+  tr.remove();
+  const pool=replies[0];
+  addMsg(pool[Math.floor(Math.random()*pool.length)],false);
+  statusTxt.textContent='অনলাইন';
+ },delay);
+}
+
+sendBtn.addEventListener('click',send);
+input.addEventListener('keydown',e=>{if(e.key==='Enter')send();});
+
+emojiToggle.addEventListener('click',()=>epicker.classList.toggle('open'));
+document.querySelectorAll('.ep-emoji').forEach(e=>{
+ e.addEventListener('click',()=>{input.value+=e.textContent;input.focus();epicker.classList.remove('open');});
+});
+document.addEventListener('click',e=>{if(!epicker.contains(e.target)&&e.target!==emojiToggle)epicker.classList.remove('open');});
+</script>

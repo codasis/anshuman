@@ -1,0 +1,179 @@
+
+<style>
+  .chat-wrap { display: flex; justify-content: center; padding: 2rem 0; }
+  .chat-box { width: 360px; height: 580px; background: var(--color-background-primary); border-radius: 24px; border: 0.5px solid var(--color-border-secondary); overflow: hidden; display: flex; flex-direction: column; }
+  .chat-header { background: #6c5ce7; padding: 16px 18px; display: flex; align-items: center; gap: 12px; }
+  .avatar-ring { width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .header-info { flex: 1; }
+  .header-name { color: #fff; font-weight: 500; font-size: 15px; line-height: 1.2; }
+  .header-status { font-size: 12px; color: rgba(255,255,255,0.75); display: flex; align-items: center; gap: 5px; }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: red; display: inline-block; }
+  .messages { flex: 1; padding: 14px; overflow-y: auto; background: var(--color-background-secondary); display: flex; flex-direction: column; gap: 8px; }
+  .msg { padding: 10px 14px; border-radius: 18px; max-width: 78%; font-size: 14px; line-height: 1.5; animation: popIn 0.25s ease; }
+  .msg.user { background: #6c5ce7; color: #fff; align-self: flex-end; border-bottom-right-radius: 5px; }
+  .msg.bot { background: var(--color-background-primary); color: var(--color-text-primary); align-self: flex-start; border-bottom-left-radius: 5px; border: 0.5px solid var(--color-border-tertiary); }
+  .msg-time { font-size: 11px; opacity: 0.6; margin-top: 3px; text-align: right; }
+  .typing { display: flex; align-items: center; gap: 5px; padding: 10px 14px; background: var(--color-background-primary); border-radius: 18px; border-bottom-left-radius: 5px; align-self: flex-start; border: 0.5px solid var(--color-border-tertiary); }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: #6c5ce7; opacity: 0.4; animation: blink 1.2s infinite; }
+  .dot:nth-child(2) { animation-delay: 0.2s; }
+  .dot:nth-child(3) { animation-delay: 0.4s; }
+  .quick-replies { display: flex; gap: 6px; padding: 10px 14px 4px; overflow-x: auto; scrollbar-width: none; background: var(--color-background-secondary); }
+  .quick-replies::-webkit-scrollbar { display: none; }
+  .qr-btn { flex-shrink: 0; padding: 6px 12px; background: var(--color-background-primary); border: 0.5px solid #6c5ce7; border-radius: 999px; font-size: 12px; color: #6c5ce7; cursor: pointer; white-space: nowrap; transition: background 0.15s; }
+  .qr-btn:hover { background: #f0eeff; }
+  .input-row { display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: var(--color-background-primary); border-top: 0.5px solid var(--color-border-tertiary); }
+  .msg-input { flex: 1; padding: 10px 14px; border: 0.5px solid var(--color-border-secondary); border-radius: 999px; background: var(--color-background-secondary); color: var(--color-text-primary); font-size: 14px; outline: none; }
+  .msg-input:focus { border-color: #6c5ce7; }
+  .send-btn { width: 38px; height: 38px; border-radius: 50%; background: #6c5ce7; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.15s; }
+  .send-btn:hover { transform: scale(1.08); }
+  .send-btn:active { transform: scale(0.95); }
+  .emoji-btn { width: 34px; height: 34px; border: none; background: none; cursor: pointer; font-size: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .emoji-btn:hover { background: var(--color-background-secondary); }
+  @keyframes popIn { from { opacity: 0; transform: scale(0.88) translateY(6px); } to { opacity: 1; transform: none; } }
+  @keyframes blink { 0%,80%,100% { opacity: 0.2; transform: scale(0.9); } 40% { opacity: 1; transform: scale(1.1); } }
+</style>
+
+
+<div class="chat-wrap">
+  <div class="chat-box">
+    <div class="chat-header">
+      <div class="avatar-ring">
+        <i class="ti ti-robot" style="color:#fff; font-size:20px;" aria-hidden="true"></i>
+      </div>
+      <div class="header-info">
+        <div class="header-name">মেসেনজার বট</div>
+        <div class="header-status"><span class="status-dot"></span> অফলাইন</div>
+      </div>
+      <i class="ti ti-dots" style="color:rgba(255,255,255,0.8); font-size:20px; cursor:pointer;" aria-hidden="true"></i>
+    </div>
+
+    <div class="messages" id="messages">
+      <div class="msg bot">হেলো! কেমন আছো? 👋</div>
+    </div>
+
+    <div class="quick-replies" id="quickReplies">
+      <button class="qr-btn" onclick="sendQuick('ভালো আছি!')">ভালো আছি!</button>
+      <button class="qr-btn" onclick="sendQuick('হ্যাঁ!')">হ্যাঁ!</button>
+      <button class="qr-btn" onclick="sendQuick('কী হচ্ছে?')">কী হচ্ছে?</button>
+      <button class="qr-btn" onclick="sendQuick('মজা করছি 😄')">মজা করছি 😄</button>
+    </div>
+
+    <div class="input-row">
+      <button class="emoji-btn" id="emojiBtn" aria-label="emoji picker">😊</button>
+      <input class="msg-input" id="msgInput" placeholder="মেসেজ লিখুন..." autocomplete="off" />
+      <button class="send-btn" onclick="send()" aria-label="send">
+        <i class="ti ti-send" style="color:#fff; font-size:18px;" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+const emojis = ['😀','😂','😍','🥳','😎','🤩','😜','🥰','😅','🤗'];
+let emojiOpen = false;
+let emojiPicker;
+
+const allReplies = [
+  ['ওয়াও! সত্যিই? 😲','দারুণ তো! 🎉'],
+  ['হাহাহা 😂','মজার কথা!'],
+  ['একদম ঠিক বলেছো 👍','আমিও তাই মনে করি!'],
+  ['বলো, শুনছি... 👂','আরও বলো!'],
+  ['আশ্চর্য! 🚀','অসাধারণ!'],
+  ['হি হি 😄','তুমি মজার!'],
+  ['আচ্ছা, বুঝলাম 🤔','তারপর কী হলো?'],
+];
+
+const quickSets = [
+  ['ভালো আছি!','হ্যাঁ!','কী হচ্ছে?','মজা করছি 😄'],
+  ['সত্যি?','কখন?','আরও বলো!','দারুণ!'],
+  ['হা হা 😂','কী মজা!','আমিও!','ঠিক বলেছো!'],
+];
+
+function now() {
+  return new Date().toLocaleTimeString('bn-BD', {hour:'2-digit', minute:'2-digit'});
+}
+
+function addMsg(text, cls) {
+  const msgs = document.getElementById('messages');
+  const d = document.createElement('div');
+  d.className = 'msg ' + cls;
+  d.innerHTML = text + '<div class="msg-time">' + now() + '</div>';
+  msgs.appendChild(d);
+  msgs.scrollTop = msgs.scrollHeight;
+  return d;
+}
+
+function showTyping() {
+  const msgs = document.getElementById('messages');
+  const t = document.createElement('div');
+  t.className = 'typing'; t.id = 'typing';
+  t.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+  msgs.appendChild(t);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function removeTyping() {
+  const t = document.getElementById('typing');
+  if (t) t.remove();
+}
+
+function updateQuickReplies() {
+  const qr = document.getElementById('quickReplies');
+  const set = quickSets[Math.floor(Math.random() * quickSets.length)];
+  qr.innerHTML = set.map(s => `<button class="qr-btn" onclick="sendQuick('${s}')">${s}</button>`).join('');
+}
+
+function botReply() {
+  showTyping();
+  const delay = 600 + Math.random() * 600;
+  setTimeout(() => {
+    removeTyping();
+    const pair = allReplies[Math.floor(Math.random() * allReplies.length)];
+    addMsg(pair[0], 'bot');
+    if (Math.random() > 0.4) {
+      setTimeout(() => addMsg(pair[1], 'bot'), 600);
+    }
+    updateQuickReplies();
+  }, delay);
+}
+
+function send() {
+  const input = document.getElementById('msgInput');
+  const txt = input.value.trim();
+  if (!txt) return;
+  addMsg(txt, 'user');
+  input.value = '';
+  botReply();
+}
+
+function sendQuick(txt) {
+  addMsg(txt, 'user');
+  botReply();
+}
+
+document.getElementById('msgInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') send();
+});
+
+document.getElementById('emojiBtn').addEventListener('click', () => {
+  if (emojiPicker) { emojiPicker.remove(); emojiPicker = null; return; }
+  const picker = document.createElement('div');
+  picker.style.cssText = 'position:absolute;bottom:60px;left:8px;background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:12px;padding:8px;display:flex;flex-wrap:wrap;gap:4px;width:180px;z-index:10;';
+  emojis.forEach(em => {
+    const b = document.createElement('button');
+    b.textContent = em;
+    b.style.cssText = 'border:none;background:none;cursor:pointer;font-size:20px;border-radius:6px;padding:2px 4px;';
+    b.onclick = () => {
+      document.getElementById('msgInput').value += em;
+      document.getElementById('msgInput').focus();
+      picker.remove(); emojiPicker = null;
+    };
+    picker.appendChild(b);
+  });
+  const chatBox = document.querySelector('.chat-box');
+  chatBox.style.position = 'relative';
+  chatBox.appendChild(picker);
+  emojiPicker = picker;
+});
+
+</script>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kids Messenger</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, sans-serif;
+        }
+
+        body{
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background:linear-gradient(135deg,#74b9ff,#a29bfe);
+        }
+
+        .chat-box{
+            width:380px;
+            height:600px;
+            background:white;
+            border-radius:25px;
+            overflow:hidden;
+            box-shadow:0 10px 30px rgba(0,0,0,0.2);
+            display:flex;
+            flex-direction:column;
+        }
+
+        .header{
+            background:#6c5ce7;
+            color:white;
+            padding:18px;
+            text-align:center;
+            font-size:28px;
+            font-weight:bold;
+            letter-spacing:1px;
+        }
+
+        .messages{
+            flex:1;
+            padding:15px;
+            overflow-y:auto;
+            background:#f1f2f6;
+        }
+
+        .message{
+            padding:12px 15px;
+            margin:10px 0;
+            border-radius:15px;
+            width:fit-content;
+            max-width:75%;
+            animation:fade 0.3s ease;
+            font-size:16px;
+        }
+
+        .user{
+            background:#00b894;
+            color:white;
+            margin-left:auto;
+            border-bottom-right-radius:5px;
+        }
+
+        .bot{
+            background:#74b9ff;
+            color:white;
+            border-bottom-left-radius:5px;
+        }
+
+        .input-area{
+            display:flex;
+            padding:12px;
+            background:white;
+            border-top:2px solid #eee;
+        }
+
+        input{
+            flex:1;
+            padding:12px;
+            border:2px solid #6c5ce7;
+            border-radius:12px;
+            outline:none;
+            font-size:16px;
+        }
+
+        button{
+            margin-left:10px;
+            padding:12px 18px;
+            border:none;
+            border-radius:12px;
+            background:#fd79a8;
+            color:white;
+            font-size:16px;
+            cursor:pointer;
+            transition:0.3s;
+        }
+
+        button:hover{
+            background:#e84393;
+            transform:scale(1.05);
+        }
+
+        @keyframes fade{
+            from{
+                opacity:0;
+                transform:translateY(10px);
+            }
+            to{
+                opacity:1;
+                transform:translateY(0);
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="chat-box">
+
+        <div class="header">
+             মেসেনজার
+        </div>
+
+        <div class="messages" id="messages">
+
+            <div class="message bot">
+                হেলো 👋
+            </div>
+
+        </div>
+
+        <div class="input-area">
+            <input type="text" id="msg" placeholder="মেসেজ লিখুন...">
+            <button onclick="sendMessage()">সেন্ড করুন</button>
+        </div>
+
+    </div>
+
+    <script>
+
+        function sendMessage(){
+
+            let input = document.getElementById("msg");
+            let message = input.value;
+
+            if(message.trim() === ""){
+                return;
+            }
+
+            let messages = document.getElementById("messages");
+
+            // User Message
+            let userMsg = document.createElement("div");
+            userMsg.classList.add("message","user");
+            userMsg.innerText = message;
+
+            messages.appendChild(userMsg);
+
+            // Auto Reply
+            setTimeout(() => {
+
+                let botMsg = document.createElement("div");
+                botMsg.classList.add("message","bot");
+
+                let replies = [
+                    "ওয়াও 😍",
+                    "খুব ভালো 🎉",
+                    "ভালো মেসেজ 👍",
+                    "হাহা 😂",
+                    "আশাধারন 🚀",
+                    "হেলো 👋"
+                ];
+
+                let randomReply = replies[Math.floor(Math.random() * replies.length)];
+
+                botMsg.innerText = randomReply;
+
+                messages.appendChild(botMsg);
+
+                messages.scrollTop = messages.scrollHeight;
+
+            },800);
+
+            input.value = "";
+
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        // Enter key support
+        document.getElementById("msg").addEventListener("keypress",function(e){
+
+            if(e.key === "Enter"){
+                sendMessage();
+            }
+
+        });
+
+    </script>
+
+</body>
+</html>
