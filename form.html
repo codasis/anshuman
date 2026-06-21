@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout – Shoppy Bazzar</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="form.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav>
+  <a class="brand" href="index.html">
+    <div class="brand-icon">SB</div>
+    <span class="brand-name">Shoppy <span>Bazzar</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="Boy.html">Boys</a></li>
+    <li><a href="Girl.html">Girls</a></li>
+    <li><a href="Kid.html">Kids</a></li>
+  </ul>
+</nav>
+
+<main class="checkout-wrap">
+  <div class="checkout-card">
+    <form action="final.html">
+      <h2>Confirm Order</h2>
+      <p class="checkout-sub">Just a few details to complete your purchase.</p>
+
+      <div class="form-group">
+        <label>Name of the customer</label>
+        <input type="text" placeholder="Enter Name" required>
+      </div>
+
+      <div class="form-group">
+        <label>Customer Contact</label>
+        <input type="tel" placeholder="Enter Contact" required>
+      </div>
+
+      <div class="form-group">
+        <label>Customer Email</label>
+        <input type="email" placeholder="Enter Email" required>
+      </div>
+
+      <div class="form-group">
+        <label>Customer Address</label>
+        <textarea placeholder="Enter your address" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Payment Method</label>
+        <select required>
+          <option value="" disabled selected>-----Select Any One-----</option>
+          <option>UPI</option>
+          <option>Card</option>
+          <option>Net Banking</option>
+          <option>Cash on Delivery</option>
+        </select>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-buy">Confirm Order</button>
+        <button type="reset" class="btn-reset">Reset</button>
+      </div>
+    </form>
+  </div>
+</main>
+
+<footer>
+  &copy; 2026 Shoppy Bazzar &nbsp;·&nbsp; All rights reserved
+</footer>
+
+</body>
+</html>

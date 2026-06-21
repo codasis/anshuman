@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Girls Collection – Shoppy Bazzar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+
+    :root {
+      --brand: #FF6B2B;
+      --brand-dark: #E05520;
+      --brand-light: #FFF0E8;
+      --surface: #FFFFFF;
+      --bg: #F5F4F1;
+      --text-primary: #1A1A1A;
+      --text-secondary: #6B6B6B;
+      --text-hint: #9E9E9E;
+      --border: rgba(0,0,0,0.10);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --shadow-card: 0 2px 16px rgba(0,0,0,0.08);
+    }
+
+    body {
+      font-family: 'Inter', Arial, sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      color: var(--text-primary);
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      background: #1A1A1A;
+      padding: 0 20px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .brand-icon {
+      width: 36px; height: 36px;
+      background: var(--brand);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 700;
+      color: white; letter-spacing: -1px; flex-shrink: 0;
+    }
+
+    .brand-name {
+      font-size: 16px; font-weight: 700;
+      color: white; letter-spacing: -0.3px;
+    }
+
+    .brand-name span { color: var(--brand); }
+
+    .nav-links { display: flex; gap: 4px; list-style: none; }
+
+    .nav-links a {
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      font-size: 13px; font-weight: 500;
+      padding: 6px 10px; border-radius: 6px;
+      transition: all 0.15s ease; letter-spacing: 0.2px;
+    }
+
+    .nav-links a:hover { color: white; background: rgba(255,255,255,0.10); }
+    .nav-links a.active { color: white; background: var(--brand); }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #1A1A1A 0%, #2D2D2D 100%);
+      padding: 28px 20px 24px;
+      text-align: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 180px; height: 180px;
+      background: var(--brand);
+      border-radius: 50%;
+      opacity: 0.08;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; left: -30px;
+      width: 140px; height: 140px;
+      background: var(--brand);
+      border-radius: 50%;
+      opacity: 0.05;
+    }
+
+    .hero-label {
+      display: inline-block;
+      background: var(--brand-light);
+      color: var(--brand-dark);
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.8px; text-transform: uppercase;
+      padding: 4px 12px; border-radius: 20px;
+      margin-bottom: 12px;
+    }
+
+    .hero h1 {
+      font-size: 26px; font-weight: 700;
+      color: white; line-height: 1.25;
+      letter-spacing: -0.5px; margin-bottom: 6px;
+    }
+
+    .hero h1 span { color: var(--brand); }
+
+    .hero p {
+      font-size: 14px; color: rgba(255,255,255,0.55);
+      margin-bottom: 20px; line-height: 1.5;
+    }
+
+    /* ── FILTER CHIPS ── */
+    .filter-row {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+
+    .chip {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.8);
+      font-size: 12px; font-weight: 500;
+      padding: 6px 14px; border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: 'Inter', Arial, sans-serif;
+    }
+
+    .chip:hover, .chip.active {
+      background: var(--brand);
+      border-color: var(--brand);
+      color: white;
+    }
+
+    /* ── MAIN ── */
+    main {
+      padding: 24px 16px 40px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: 18px; font-weight: 700;
+      color: var(--text-primary); letter-spacing: -0.3px;
+    }
+
+    .section-count {
+      font-size: 13px; color: var(--text-hint);
+    }
+
+    /* ── PRODUCT GRID ── */
+    .products {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    /* ── PRODUCT CARD ── */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.13);
+    }
+
+    .card:active { transform: translateY(0); }
+
+    /* Image area */
+    .card-img {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      background: #F0EDE8;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover .card-img img {
+      transform: scale(1.04);
+    }
+
+    /* Fallback placeholder when image is missing */
+    .card-img .placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      opacity: 0.15;
+    }
+
+    /* Badge */
+    .badge {
+      position: absolute;
+      top: 10px; left: 10px;
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 0.5px; text-transform: uppercase;
+      padding: 3px 10px; border-radius: 20px;
+    }
+
+    .badge-orange { background: var(--brand-light); color: var(--brand-dark); }
+    .badge-dark   { background: #1A1A1A; color: white; }
+
+    /* Wishlist btn */
+    .wishlist {
+      position: absolute;
+      top: 10px; right: 10px;
+      width: 30px; height: 30px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.15s;
+    }
+
+    .wishlist:hover { background: var(--brand-light); }
+
+    /* Card body */
+    .card-body { padding: 12px 14px 14px; }
+
+    .card-name {
+      font-size: 13px; font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    .card-price {
+      font-size: 16px; font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      letter-spacing: -0.3px;
+    }
+
+    .card-price .original {
+      font-size: 12px; font-weight: 400;
+      color: var(--text-hint);
+      text-decoration: line-through;
+      margin-left: 5px;
+    }
+
+    .card-price .discount {
+      font-size: 11px; font-weight: 600;
+      color: #2ECC71;
+      margin-left: 5px;
+    }
+
+    /* Buy button — exact match to .btn-primary */
+    .btn-buy {
+      display: block; width: 100%;
+      padding: 10px;
+      background: var(--brand);
+      color: white;
+      border: none; border-radius: var(--radius-sm);
+      font-size: 13px; font-weight: 600;
+      font-family: 'Inter', Arial, sans-serif;
+      cursor: pointer;
+      letter-spacing: 0.1px;
+      transition: all 0.15s ease;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .btn-buy:hover {
+      background: var(--brand-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(255,107,43,0.35);
+    }
+
+    .btn-buy:active { transform: translateY(0); box-shadow: none; }
+
+    /* ── TRUST BADGES ── */
+    .trust-row {
+      display: flex; gap: 8px;
+      justify-content: center; flex-wrap: wrap;
+      margin-top: 28px; padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .trust-badge {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 11px; color: var(--text-hint);
+    }
+
+    .trust-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%; background: #2ECC71;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center; padding: 20px;
+      font-size: 12px; color: var(--text-hint);
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 360px) {
+      .hero h1 { font-size: 22px; }
+      .nav-links a { padding: 6px 7px; font-size: 12px; }
+      .card-name { font-size: 12px; }
+    }
+
+    @media (min-width: 500px) {
+      .products { grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    }
+
+    @media (min-width: 640px) {
+      nav { padding: 0 40px; }
+      .hero { padding: 40px 40px 28px; }
+      .hero h1 { font-size: 32px; }
+      main { padding: 32px 24px 60px; }
+    }
+
+    @media (min-width: 900px) {
+      .products { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+      main { padding: 36px 32px 60px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav>
+  <a class="brand" href="index.html">
+    <div class="brand-icon">SB</div>
+    <span class="brand-name">Shoppy <span>Bazzar</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="Boy.html">Boys</a></li>
+    <li><a href="Girl.html" class="active">Girls</a></li>
+    <li><a href="Kid.html">Kids</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-label">Summer Collection 2026</div>
+  <h1>Sweet Styles for <span>Every</span><br>Occasion</h1>
+  <p>Pretty, comfy outfits girls love<br>and parents trust.</p>
+  <div class="filter-row">
+    <button class="chip active" onclick="filterCards(this, 'all')">All</button>
+    <button class="chip" onclick="filterCards(this, 'party')">Party Wear</button>
+    <button class="chip" onclick="filterCards(this, 'casual')">Casual</button>
+    <button class="chip" onclick="filterCards(this, 'summer')">Summer</button>
+    <button class="chip" onclick="filterCards(this, 'winter')">Winter</button>
+  </div>
+</section>
+
+<!-- Products -->
+<main>
+  <div class="section-header">
+    <span class="section-title">Girls Collection</span>
+    <span class="section-count" id="count">6 items</span>
+  </div>
+
+  <div class="products" id="productGrid">
+
+    <!-- Card 1 -->
+    <div class="card" data-cat="party">
+      <div class="card-img">
+        <img src="PIC/G1.webp" alt="Girls Party Wear" onerror="this.style.display='none'">
+        <div class="placeholder">🎉</div>
+        <span class="badge badge-orange">Party</span>
+        <button class="wishlist" aria-label="Add to wishlist">♡</button>
+      </div>
+      <div class="card-body">
+        <div class="card-name">Party Wear Dress</div>
+        <div class="card-price">
+          ₹899
+          <span class="original">₹1,199</span>
+          <span class="discount">25% off</span>
+        </div>
+        <a href="form.html" class="btn-buy">Buy Now →</a>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="card" data-cat="casual">
+      <div class="card-img">
+        <img src="PIC/G2.webp" alt="Girls Casual Outfit" onerror="this.style.display='none'">
+        <div class="placeholder">👕</div>
+        <span class="badge badge-dark">Casual</span>
+        <button class="wishlist" aria-label="Add to wishlist">♡</button>
+      </div>
+      <div class="card-body">
+        <div class="card-name">Casual Outfit</div>
+        <div class="card-price">
+          ₹699
+          <span class="original">₹899</span>
+          <span class="discount">22% off</span>
+        </div>
+        <a href="form.html" class="btn-buy">Buy Now →</a>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="card" data-cat="summer">
+      <div class="card-img">
+        <img src="PIC/G3.webp" alt="Girls Summer Dress" onerror="this.style.display='none'">
+        <div class="placeholder">☀️</div>
+        <span class="badge badge-orange">Summer</span>
+        <button class="wishlist" aria-label="Add to wishlist">♡</button>
+      </div>
+      <div class="card-body">
+        <div class="card-name">Summer Frock</div>
+        <div class="card-price">
+          ₹799
+          <span class="original">₹999</span>
+          <span class="discount">20% off</span>
+        </div>
+        <a href="form.html" class="btn-buy">Buy Now →</a>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="card" data-cat="party">
+      <div class="card-img">
+        <img src="PIC/G4.webp" alt="Stylish Girls Dress" onerror="this.style.display='none'">
+        <div class="placeholder">👗</div>
+        <span class="badge badge-dark">Stylish</span>
+        <button class="wishlist" aria-label="Add to wishlist">♡</button>
+      </div>
+      <div class="card-body">
+        <div class="card-name">Stylish Dress</div>
+        <div class="card-price">
+          ₹999
+          <span class="original">₹1,299</span>
+          <span class="discount">23% off</span>
+        </div>
+        <a href="form.html" class="btn-buy">Buy Now →</a>
+      </div>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="card" data-cat="winter">
+      <div class="card-img">
+        <img src="PIC/G5.webp" alt="Girls Winter Wear" onerror="this.style.display='none'">
+        <div class="placeholder">🧥</div>
+        <span class="badge badge-dark">Winter</span>
+        <button class="wishlist" aria-label="Add to wishlist">♡</button>
+      </div>
+      <div class="card-body">
+        <div class="card-name">Winter Wear</div>
+        <div class="card-price">
+          ₹1,199
+          <span class="original">₹1,599</span>
+          <span class="discount">25% off</span>
+        </div>
+        <a href="form.html" class="btn-buy">Buy Now →</a>
+      </div>
+    </div>
+
+    <!-- Card 6 -->
+    <div class="card" data-cat="casual">
+      <div class="card-img">
+        <img src="PIC/G6.webp" alt="Trendy Girls Outfit" onerror="this.style.display='none'">
+        <div class="placeholder">✨</div>
+        <span class="badge badge-orange">Trendy</span>
+        <button class="wishlist" aria-label="Add to wishlist">♡</button>
+      </div>
+      <div class="card-body">
+        <div class="card-name">Trendy Outfit</div>
+        <div class="card-price">
+          ₹849
+          <span class="original">₹1,099</span>
+          <span class="discount">23% off</span>
+        </div>
+        <a href="form.html" class="btn-buy">Buy Now →</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Trust row -->
+  <div class="trust-row">
+    <span class="trust-badge"><span class="trust-dot"></span> Secure checkout</span>
+    <span class="trust-badge"><span class="trust-dot"></span> Free returns</span>
+    <span class="trust-badge"><span class="trust-dot"></span> 10,000+ products</span>
+  </div>
+</main>
+
+<footer>
+  &copy; 2026 Shoppy Bazzar &nbsp;·&nbsp; All rights reserved
+</footer>
+
+<script>
+  // Filter by category
+  function filterCards(btn, cat) {
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+
+    const cards = document.querySelectorAll('#productGrid .card');
+    let visible = 0;
+    cards.forEach(card => {
+      const show = cat === 'all' || card.dataset.cat === cat;
+      card.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    document.getElementById('count').textContent = visible + ' item' + (visible !== 1 ? 's' : '');
+  }
+
+  // Wishlist toggle
+  document.querySelectorAll('.wishlist').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      this.textContent = this.textContent === '♡' ? '♥' : '♡';
+      this.style.color = this.textContent === '♥' ? '#FF6B2B' : '';
+      this.style.background = this.textContent === '♥' ? '#FFF0E8' : '';
+    });
+  });
+</script>
+
+</body>
+</html>
